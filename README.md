@@ -9,7 +9,7 @@ Pre-trained model checkpoints are packaged in this GitHub repository's releases.
 This project uses the IITD Iris Dataset, which you need to obtain separately due to licensing requirements. The dataset can be requested from [IIT Delhi Iris Database](http://www4.comp.polyu.edu.hk/~csajaykr/IITD/Database_Iris.htm).
 
 ### Dataset Segmentation
-The iris images need to be segmented using [Hofbauer et al.](https://ieeexplore.ieee.org/document/6976811). The masks can be directly downloaded from [WaveLab's website](https://www.wavelab.at/sources/Hofbauer14b/).
+The iris images need to be segmented using [Hofbauer et al.](https://ieeexplore.ieee.org/document/6976811). The masks can be directly downloaded from [WaveLab's website](https://www.wavelab.at/sources/Hofbauer14b/). We provide a utility script in `scripts/` to help with segmentation.
 
 ### Dataset Structure
 The dataset should be organized as follows:
