@@ -3,40 +3,28 @@
 This repository contains code for iris feature extraction and embedding generation for [FEAP](https://eprint.iacr.org/2024/100) using a multi-stage training pipeline. The system is designed to work with the IITD Iris Database.
 
 ## Pre-trained Models
-Pre-trained model checkpoints are available at [this link](https://uconn-my.sharepoint.com/:f:/g/personal/benjamin_fuller_uconn_edu/Em5J7jAZdgtBqEcJwuKdOioBJtR9FHeS3vujnCj215Td-Q?e=deWjy0). The password is `IDONTKNOW`.
+Pre-trained model checkpoints are packaged in this GitHub repository's releases.
 
 ## Dataset Requirements
 This project uses the IITD Iris Dataset, which you need to obtain separately due to licensing requirements. The dataset can be requested from [IIT Delhi Iris Database](http://www4.comp.polyu.edu.hk/~csajaykr/IITD/Database_Iris.htm).
 
 ### Dataset Segmentation
-The iris images need to be segmented using [Ahmad and Fuller](https://arxiv.org/pdf/1812.08245). 
+The iris images need to be segmented using [Hofbauer et al.](https://ieeexplore.ieee.org/document/6976811). The masks can be directly downloaded from [WaveLab's website](https://www.wavelab.at/sources/Hofbauer14b/). We provide a utility script in `scripts/` to help with segmentation.
 
 ### Dataset Structure
 The dataset should be organized as follows:
 
-#### Training Data
+#### Training & Inference Data
 ```
-IITD_folders/IITD_folders_train_only/
+IITD_Segmented/
 ├── 001/
-│   ├── image1.png
-│   ├── image2.png
+│   ├── 01_L.bmp
+│   ├── 02_L.bmp
 │   └── ...
 ├── 002/
 ├── 003/
 └── ...
 ```
-
-Where each numbered folder represents a class (person).
-
-#### Inference Data
-
-```
-IITD_folders/IITD_folders_inference_only/
-├── 014d5R.png
-├── 023d8R.png
-└── ...
-```
-Note that the inference data is flattened (not organized in folders by class) to prevent accidentally training on inference data.
 
 ## Installation
 
@@ -56,7 +44,6 @@ torchvision>=0.11.0
 numpy>=1.19.2
 opencv-python>=4.5.0
 matplotlib>=3.3.0
-scikit-learn>=0.24.0
 tqdm>=4.50.0
 ```
 
@@ -76,26 +63,20 @@ The training process consists of three sequential stages:
    ```
    This trains the initial embedding model using the marginal unified cross-entropy loss.
 
-2. **Stage 2: Circle Loss**
+2. **Stage 2: Refinement**
    ```bash
    python src/stage_2.py
    ```
    Note: Before running, you may need to edit the file to point to the Stage 1 checkpoint:
    ```python
-   train_iris_model(config, resume_training=True, checkpoint_path='path/to/stage_1.pt')
+   PRIMARY_CHECKPOINT_TO_LOAD = "/path/to/stage_1.pt"
    ```
-
-3. **Stage 3: Refinement**
-   ```bash
-   python src/stage_3.py
-   ```
-   Note: Before running, ensure the file correctly references the Stage 2 checkpoint.
 
 ### Inference
 If you have the pre-trained models, you can run inference directly:
 
 ```bash
-python src/infer_stage_3.py
+python src/infer.py
 ```
 
 Make sure the inference script is pointing to the correct model checkpoints and dataset directories.
@@ -113,4 +94,4 @@ If you use our work, please cite:
 ```
 
 ## License
-This project is provided under GPL. The IITD dataset has its own licensing terms which must be respected.
+This project is provided under GPL. The IITD dataset and the segmentation masks has its own licensing terms which must be respected.
